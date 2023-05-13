@@ -73,11 +73,27 @@ public class PlaylistServiceImpl implements PlaylistService {
             throw new NotFoundException(String.format("Không tìm thấy playlist với id %s", id));
         }
         List<Song> newListSong = playlist.getListSongs();
-        if(newListSong == null) {
+        if(newListSong.isEmpty()) {
             throw new InvalidException("Không có bài hát nào trong playlist");
         }
         newListSong.remove(song);
+        if(newListSong.isEmpty()) {
+            playlist.setThumbnail(null);
+        }
         playlist.setListSongs(newListSong);
+        repo.save(playlist);
+        return playlist;
+    }
+
+    @Override
+    public Playlist update(String id, PlaylistDto dto) {
+        Playlist playlist = getPlaylistById(id);
+        if(playlist == null) {
+            throw new NotFoundException(String.format("Không tìm thấy playlist với id %s", id));
+        }
+        if(!ObjectUtils.isEmpty(dto.getName())) {
+            playlist.setName(dto.getName());
+        }
         repo.save(playlist);
         return playlist;
     }

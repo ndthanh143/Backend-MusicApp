@@ -53,9 +53,18 @@ public class MusicTypeServiceImpl implements MusicTypeService {
     }
 
     @Override
-    public MusicType update(String id, MusicTypeDto dto, MultipartFile thumbnail) {
-        return null;
+    public MusicType update(String id, MusicTypeDto dto) {
+        MusicType musicType = getById(id);
+        if(musicType == null) {
+            throw new NotFoundException(String.format("Không tìm thấy thể loại nhạc có id %s", id));
+        }
+        if(!ObjectUtils.isEmpty(dto.getName())) {
+            musicType.setName(dto.getName());
+        }
+        repo.save(musicType);
+        return musicType;
     }
+
 
     @Override
     public MusicType delete(String id) throws IOException {

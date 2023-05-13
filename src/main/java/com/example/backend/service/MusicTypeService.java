@@ -14,7 +14,7 @@ public interface MusicTypeService {
 
     MusicType create(MusicTypeDto dto, String thumbnailUrl) throws IOException;
 
-    MusicType update(String id, MusicTypeDto dto, MultipartFile thumbnail);
+    MusicType update(String id, MusicTypeDto dto);
 
     MusicType delete(String id) throws IOException;
 }

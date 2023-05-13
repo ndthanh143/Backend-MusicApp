@@ -45,8 +45,9 @@ public class MusicTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MusicType> update(@PathVariable String id, @RequestBody MusicTypeDto dto, @RequestPart MultipartFile thumbnail) {
-        return new ResponseEntity<>(musicTypeService.update(id, dto, thumbnail), HttpStatus.OK);
+    public ResponseEntity<MusicType> update(@PathVariable String id, @RequestBody MusicTypeDto dto) {
+
+        return new ResponseEntity<>(musicTypeService.update(id, dto), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

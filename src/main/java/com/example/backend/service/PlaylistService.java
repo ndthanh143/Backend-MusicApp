@@ -17,5 +17,7 @@ public interface PlaylistService {
 
     Playlist removeSongFromPlaylist(String id, Song song);
 
+    Playlist update(String id, PlaylistDto dto);
+
     Playlist delete(String id);
 }
