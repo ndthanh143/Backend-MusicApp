@@ -24,6 +24,11 @@ public class PlaylistServiceImpl implements PlaylistService {
 
 
     @Override
+    public List<Playlist> findAll() {
+        return repo.findAll();
+    }
+
+    @Override
     public Playlist getPlaylistById(String id) {
         Optional<Playlist> playlist = repo.findById(id);
         return playlist.get();

@@ -7,6 +7,9 @@ import com.example.backend.model.Song;
 import java.util.List;
 
 public interface PlaylistService {
+
+    List<Playlist> findAll();
+
     Playlist getPlaylistById(String id);
 
     List<Song> getListSongFromPlaylist(String id);
