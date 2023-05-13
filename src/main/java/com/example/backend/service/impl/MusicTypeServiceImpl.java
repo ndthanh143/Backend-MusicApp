@@ -5,12 +5,12 @@ import com.example.backend.exception.InvalidException;
 import com.example.backend.exception.NotFoundException;
 import com.example.backend.model.MusicType;
 import com.example.backend.repository.MusicTypeRepository;
+import com.example.backend.service.FileStorageService;
 import com.example.backend.service.MusicTypeService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +18,11 @@ import java.util.Optional;
 @Service
 public class MusicTypeServiceImpl implements MusicTypeService {
     private MusicTypeRepository repo;
+    private final FileStorageService fileUpload;
 
-    public MusicTypeServiceImpl(MusicTypeRepository repo) {
+    public MusicTypeServiceImpl(MusicTypeRepository repo, FileStorageService fileUpload) {
         this.repo = repo;
+        this.fileUpload = fileUpload;
     }
 
     @Override
@@ -56,11 +58,14 @@ public class MusicTypeServiceImpl implements MusicTypeService {
     }
 
     @Override
-    public MusicType delete(String id) {
+    public MusicType delete(String id) throws IOException {
         MusicType musicType = getById(id);
         if(musicType == null) {
             throw new NotFoundException(String.format("Không tìm thấy thể loại nhạc có id %s", id));
         }
+        String thumbnailUrl = musicType.getThumbnailUrl();
+        String thumbnailId = thumbnailUrl.substring(thumbnailUrl.lastIndexOf("/") + 1, thumbnailUrl.lastIndexOf("."));
+        fileUpload.deleteFile(thumbnailId);
         repo.delete(musicType);
         return musicType;
     }

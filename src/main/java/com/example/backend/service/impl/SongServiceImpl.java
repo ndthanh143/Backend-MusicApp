@@ -1,14 +1,15 @@
 package com.example.backend.service.impl;
 
+import com.cloudinary.Cloudinary;
 import com.example.backend.dto.SongDto;
 import com.example.backend.exception.InvalidException;
 import com.example.backend.exception.NotFoundException;
 import com.example.backend.model.Song;
 import com.example.backend.repository.SongRepository;
+import com.example.backend.service.FileStorageService;
 import com.example.backend.service.SongService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,9 +18,15 @@ import java.util.Optional;
 @Service
 public class SongServiceImpl implements SongService {
     private SongRepository repo;
+    private Cloudinary cloudinary;
 
-    public SongServiceImpl(SongRepository repo) {
+    private final FileStorageService fileUpload;
+
+
+    public SongServiceImpl(SongRepository repo, Cloudinary cloudinary, FileStorageService fileUpload) {
         this.repo = repo;
+        this.cloudinary = cloudinary;
+        this.fileUpload = fileUpload;
     }
 
     @Override
@@ -31,6 +38,18 @@ public class SongServiceImpl implements SongService {
     @Override
     public List<Song> findAll() {
         return repo.findAll();
+    }
+
+    @Override
+    public List<Song> findByMusicType(String id) {
+        List<Song> findResult= repo.findSongByMusicType(id);
+        return findResult;
+    }
+
+    @Override
+    public List<Song> findByName(String name) {
+        List<Song> findResult = repo.findSongByName(name);
+        return findResult;
     }
 
 
@@ -68,15 +87,38 @@ public class SongServiceImpl implements SongService {
 
     @Override
     public Song update(String id, SongDto dto) {
-        return null;
-    }
-
-    @Override
-    public Song delete(String id) {
         Song song = getSongById(id);
         if(song == null) {
             throw new NotFoundException(String.format("Không tìm thấy bài hát có id: %s", id));
         }
+        if(!ObjectUtils.isEmpty(dto.getName())) {
+            song.setName(dto.getName());
+        }
+        if(!ObjectUtils.isEmpty(dto.getType())) {
+            song.setType(dto.getType());
+        }
+        if(!ObjectUtils.isEmpty(dto.getLyrics())) {
+            song.setLyrics(dto.getLyrics());
+        }
+        if(!ObjectUtils.isEmpty(dto.getArtist())) {
+            song.setArtist(dto.getArtist());
+        }
+        repo.save(song);
+        return song;
+    }
+
+    @Override
+    public Song delete(String id) throws IOException {
+        Song song = getSongById(id);
+        if(song == null) {
+            throw new NotFoundException(String.format("Không tìm thấy bài hát có id: %s", id));
+        }
+        String songUrl = song.getSongUrl();
+        String imageSongUrl = song.getImageSongUrl();
+        String songId = songUrl.substring(songUrl.lastIndexOf("/") + 1, songUrl.lastIndexOf("."));
+        String imageSongId = imageSongUrl.substring(imageSongUrl.lastIndexOf("/") + 1, imageSongUrl.lastIndexOf("."));
+        fileUpload.deleteFile(songId);
+        fileUpload.deleteFile(imageSongId);
         repo.deleteById(id);
         return song;
     }

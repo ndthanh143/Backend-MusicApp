@@ -2,7 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.SongDto;
 import com.example.backend.model.Song;
-import com.example.backend.service.FileUpload;
+import com.example.backend.service.FileStorageService;
 import com.example.backend.service.SongService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +16,11 @@ import java.util.List;
 @RequestMapping("/api/song")
 public class SongController {
     private final SongService songService;
-    private final FileUpload fileUpload;
+    private final FileStorageService fileStorageService;
 
-    public SongController(SongService songService, FileUpload fileUpload) {
+    public SongController(SongService songService, FileStorageService fileStorageService) {
         this.songService = songService;
-        this.fileUpload = fileUpload;
+        this.fileStorageService = fileStorageService;
     }
 
     @GetMapping("/{id}")
@@ -33,10 +33,21 @@ public class SongController {
         return new ResponseEntity<>(songService.findAll(), HttpStatus.OK);
     }
 
+    @GetMapping("/all/{musicTypeId}")
+    public ResponseEntity<List<Song>> getSongsByMusicTypeId(@PathVariable String musicTypeId) {
+        return new ResponseEntity<>(songService.findByMusicType(musicTypeId), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public List<Song> searchSongs(@RequestParam("q") String query) {
+        return songService.findByName(query);
+    }
+
+
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<Song> create(@RequestPart("songdto") SongDto dto, @RequestPart("audio") MultipartFile audio, @RequestPart("image") MultipartFile image) throws IOException {
-        String songUrl = fileUpload.uploadFile(audio);
-        String imageSongUrl = fileUpload.uploadFile(image);
+        String songUrl = fileStorageService.uploadFile(audio);
+        String imageSongUrl = fileStorageService.uploadFile(image);
 
         return new ResponseEntity<>(songService.create(dto, songUrl, imageSongUrl), HttpStatus.OK);
     }
@@ -47,7 +58,7 @@ public class SongController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Song> delete(@PathVariable String id) {
+    public ResponseEntity<Song> delete(@PathVariable String id) throws IOException {
         return new ResponseEntity<>(songService.delete(id), HttpStatus.OK);
     }
 }

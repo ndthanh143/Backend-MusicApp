@@ -58,7 +58,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
         List<Song> newListSong = playlist.getListSongs();
         if (newListSong == null) {
-//            playlist.setThumbnail(song.getImageSongUrl());
+            playlist.setThumbnail(song.getImageSongUrl());
         }
         newListSong.add(song);
         playlist.setListSongs(newListSong);

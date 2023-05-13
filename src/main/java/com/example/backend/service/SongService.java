@@ -11,7 +11,10 @@ public interface SongService {
     Song getSongById(String id);
     List<Song> findAll();
 
+    List<Song> findByMusicType(String id);
+    List<Song> findByName(String name);
+
     Song create(SongDto dto, String songUrl, String imageSongUrl) throws IOException;
     Song update(String id, SongDto dto);
-    Song delete(String id);
+    Song delete(String id) throws IOException;
 }

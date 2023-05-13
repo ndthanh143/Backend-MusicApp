@@ -20,7 +20,7 @@ public class Playlist {
 
     private String name;
 
-    private byte[] thumbnail;
+    private String thumbnail;
 
     private List<Song> listSongs;
 
