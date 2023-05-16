@@ -6,26 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "user")
-public class User {
+@Document(collection = "user-otp")
+public class UserOTP {
     @Id
     private String id;
-
-    private String name;
-
-    private String phone;
-
     private String email;
-
-    private String password;
-
-    private Role role;
-
-    private boolean trangThai = true;
-
-
+    private String otp;
+    private boolean verified;
 }

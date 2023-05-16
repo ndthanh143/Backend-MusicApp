@@ -8,10 +8,10 @@ import java.util.Optional;
 
 public interface UserRepository extends MongoRepository<User,String> {
     @Query(value = "{'email':  ?0}")
-    Optional<User> getUser(String email);
+    Optional<User> getUserByEmail(String email);
 
     @Query(value = "{'email': ?0}", exists = true)
-    boolean kiemtraEmail(String email);
+    boolean checkEmail(String email);
 
     @Query(value = "{'phone': ?0}", exists = true)
     boolean existsByUsername(String phone);

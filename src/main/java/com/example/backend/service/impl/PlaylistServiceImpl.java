@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +64,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
         List<Song> newListSong = playlist.getListSongs();
         if (newListSong == null) {
+            newListSong = new ArrayList<>();
             playlist.setThumbnail(song.getImageSongUrl());
         }
         newListSong.add(song);
