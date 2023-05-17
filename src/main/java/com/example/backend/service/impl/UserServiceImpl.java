@@ -1,13 +1,10 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.UserDto;
-import com.example.backend.exception.InvalidException;
 import com.example.backend.exception.NotFoundException;
-import com.example.backend.model.Role;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.UserService;
-import com.example.backend.utils.ERole;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 

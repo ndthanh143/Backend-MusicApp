@@ -20,8 +20,7 @@ public class UserController {
         this.userService = userService;
     }
 
-
-    @GetMapping("/users")
+    @GetMapping("/all")
     public ResponseEntity<?> getAllUsers() {
         List<User> users= userService.findAll();
         if (users.size() >0) {

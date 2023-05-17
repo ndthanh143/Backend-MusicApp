@@ -1,5 +1,6 @@
 package com.example.backend.model;
 
+import com.example.backend.utils.ERole;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class User {
 
     private String password;
 
-    private Role role;
+    private ERole role;
 
     private boolean trangThai = true;
 

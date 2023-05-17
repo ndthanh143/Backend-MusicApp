@@ -7,7 +7,7 @@ import com.example.backend.model.User;
 import javax.naming.AuthenticationException;
 
 public interface AuthService {
-    void signUp(UserDto dto);
+    User signUp(UserDto dto);
 
     User login(UserLoginDto dto) throws AuthenticationException;
 

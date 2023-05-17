@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.UserDto;
 import com.example.backend.dto.UserLoginDto;
+import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,13 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signUp(@RequestBody UserDto dto) {
-        authService.signUp(dto);
-        return new ResponseEntity<>("Đăng ký thành công!", HttpStatus.OK);
+    public ResponseEntity<User> signUp(@RequestBody UserDto dto) {
+        System.out.println("dto" + dto.getEmail());
+        return new ResponseEntity<>(authService.signUp(dto), HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> signUp(@RequestBody UserLoginDto dto) throws AuthenticationException {
+    public ResponseEntity<?> login(@RequestBody UserLoginDto dto) throws AuthenticationException {
         return new ResponseEntity<>(authService.login(dto), HttpStatus.OK);
     }
 

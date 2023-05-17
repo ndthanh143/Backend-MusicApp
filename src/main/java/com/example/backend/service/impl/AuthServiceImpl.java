@@ -3,7 +3,6 @@ package com.example.backend.service.impl;
 import com.example.backend.dto.UserDto;
 import com.example.backend.dto.UserLoginDto;
 import com.example.backend.exception.InvalidException;
-import com.example.backend.model.Role;
 import com.example.backend.model.User;
 import com.example.backend.model.UserOTP;
 import com.example.backend.repository.UserOTPRepository;
@@ -17,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import javax.naming.AuthenticationException;
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.Random;
 
@@ -35,9 +33,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void signUp(UserDto dto) {
-        Role role = new Role();
-        role.setName(ERole.ROLE_USER);
+    public User signUp(UserDto dto) {
         if(ObjectUtils.isEmpty(dto.getName())){
             throw new InvalidException("Tên tài khoản không được bỏ trống");
         }
@@ -50,10 +46,6 @@ public class AuthServiceImpl implements AuthService {
         }
         if(ObjectUtils.isEmpty(dto.getPhone())){
             throw new InvalidException("Số điện thoại không đươc bỏ trống");
-        }
-        if(ObjectUtils.isEmpty(role)){
-            throw new InvalidException("Role không được bỏ trống");
-
         }
         if(repo.checkEmail(dto.getEmail().trim())){
             throw new InvalidException(String.format("Địa chỉ email: %s đã tồn tại",dto.getEmail()));
@@ -73,12 +65,12 @@ public class AuthServiceImpl implements AuthService {
         user.setEmail(dto.getEmail().trim());
         user.setPassword(dto.getPassword());
         user.setPhone(dto.getPhone().trim());
-        user.setRole(role);
+        user.setRole(ERole.ROLE_USER);
         user.setTrangThai(false);
         repo.save(user);
-
         // Gửi email xác thực
         sendVerificationEmail(user.getEmail(), verificationCode);
+        return user;
     }
 
     private String generateVerificationCode() {
@@ -115,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User login(UserLoginDto dto) throws AuthenticationException {
-            Optional<User> user = repo.getUserByEmail(dto.getUsername());
+            Optional<User> user = repo.getUserByEmail(dto.getEmail());
         if(user == null) {
             throw new AuthenticationException("User not found");
         }
