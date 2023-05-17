@@ -34,6 +34,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User signUp(UserDto dto) {
+        System.out.println("Check 1");
         if(ObjectUtils.isEmpty(dto.getName())){
             throw new InvalidException("Tên tài khoản không được bỏ trống");
         }
@@ -50,6 +51,7 @@ public class AuthServiceImpl implements AuthService {
         if(repo.checkEmail(dto.getEmail().trim())){
             throw new InvalidException(String.format("Địa chỉ email: %s đã tồn tại",dto.getEmail()));
         }
+        System.out.println("Check 2");
 
         // Tạo mã xác thực
         String verificationCode = generateVerificationCode();
@@ -58,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         userOTP.setOtp(verificationCode);
         userOTP.setVerified(false);
         otpRepository.save(userOTP);
+        System.out.println("Check 3");
 
 
         User user = new User();
@@ -68,8 +71,12 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(ERole.ROLE_USER);
         user.setTrangThai(false);
         repo.save(user);
+        System.out.println("Check 4");
+
         // Gửi email xác thực
         sendVerificationEmail(user.getEmail(), verificationCode);
+        System.out.println("Check 5");
+
         return user;
     }
 

@@ -10,6 +10,6 @@ public interface SongRepository extends MongoRepository<Song, String> {
     @Query(value = "{name: {$regex:  ?0, $options: 'i'}}")
     List<Song> findSongByName(String keyword);
 
-    @Query("{'Type.id': {$eq: ?0}}")
+    @Query(value = "{'Type.id': ?0}")
     List<Song> findSongByMusicType(String id);
 }
