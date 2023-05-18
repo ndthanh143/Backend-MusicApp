@@ -74,6 +74,7 @@ public class UserServiceImpl implements UserService {
         if(!ObjectUtils.isEmpty(dto.getPassword())) {
             existUser.setPassword(dto.getPassword());
         }
+        userRepository.save(existUser);
         return existUser;
     }
 
