@@ -30,9 +30,10 @@ public class UserController {
         }
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable String userId, @RequestBody UserDto dto) {
-        return new ResponseEntity<>(userService.update(userId, dto), HttpStatus.OK);
+    @PutMapping("/{id}")
+    public ResponseEntity<User> update(@PathVariable String id, @RequestBody UserDto dto) {
+        System.out.println(id + dto.getName());
+        return new ResponseEntity<>(userService.update(id, dto), HttpStatus.OK);
     }
 
 }
