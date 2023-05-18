@@ -9,7 +9,7 @@ import javax.naming.AuthenticationException;
 public interface AuthService {
     User signUp(UserDto dto);
 
-    User login(UserLoginDto dto) throws AuthenticationException;
+    User login(String email, String password) throws AuthenticationException;
 
     boolean verifyOTP(String email, String otp);
 }

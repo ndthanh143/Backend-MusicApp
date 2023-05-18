@@ -113,12 +113,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public User login(UserLoginDto dto) throws AuthenticationException {
-            Optional<User> user = repo.getUserByEmail(dto.getEmail());
+    public User login(String email, String password) throws AuthenticationException {
+            Optional<User> user = repo.getUserByEmail(email);
         if(user == null) {
             throw new AuthenticationException("User not found");
         }
-        if(user.get().getPassword() != dto.getPassword()) {
+        if(!user.get().getPassword().equals(password)) {
             throw new AuthenticationException("Password is Wrong!");
         }
         return user.get();

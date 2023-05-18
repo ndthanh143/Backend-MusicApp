@@ -31,9 +31,10 @@ public class AuthController {
         return new ResponseEntity<>(authService.signUp(dto), HttpStatus.OK);
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDto dto) throws AuthenticationException {
-        return new ResponseEntity<>(authService.login(dto), HttpStatus.OK);
+    @PostMapping("/login" )
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) throws AuthenticationException {
+        System.out.println(email + password);
+        return new ResponseEntity<>(authService.login(email, password), HttpStatus.OK);
     }
 
     @PostMapping("/{email}/verify")
