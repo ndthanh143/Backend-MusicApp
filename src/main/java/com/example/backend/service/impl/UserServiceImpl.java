@@ -1,6 +1,7 @@
 package com.example.backend.service.impl;
 
 import com.example.backend.dto.UserDto;
+import com.example.backend.exception.InvalidException;
 import com.example.backend.exception.NotFoundException;
 import com.example.backend.model.User;
 import com.example.backend.repository.UserRepository;
@@ -74,6 +75,20 @@ public class UserServiceImpl implements UserService {
         if(!ObjectUtils.isEmpty(dto.getPassword())) {
             existUser.setPassword(dto.getPassword());
         }
+        userRepository.save(existUser);
+        return existUser;
+    }
+
+    @Override
+    public User changePassword(String id, String oldPassword, String newPassword) {
+        User existUser = getUser(id);
+        if(existUser == null) {
+            throw new NotFoundException("User not found");
+        }
+        if(!existUser.getPassword().equals(oldPassword)) {
+            throw new InvalidException("Password wrong!");
+        }
+        existUser.setPassword(newPassword);
         userRepository.save(existUser);
         return existUser;
     }

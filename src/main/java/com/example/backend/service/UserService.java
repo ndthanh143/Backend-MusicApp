@@ -10,5 +10,7 @@ public interface UserService {
     User getUser(String id);
     User create(UserDto DTO);
     User update(String id, UserDto DTO);
+
+    User changePassword(String id, String oldPassword, String newPassword);
     User delete(String id);
 }

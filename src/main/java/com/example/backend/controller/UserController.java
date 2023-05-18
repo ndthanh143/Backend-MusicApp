@@ -32,8 +32,11 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> update(@PathVariable String id, @RequestBody UserDto dto) {
-        System.out.println(id + dto.getName());
         return new ResponseEntity<>(userService.update(id, dto), HttpStatus.OK);
+    }
+    @PutMapping("/update-password/{id}")
+    public ResponseEntity<User> updatePassword(@PathVariable String id, @RequestPart("oldPassword") String oldPassword, @RequestPart("newPassword") String newPassword) {
+        return new ResponseEntity<>(userService.changePassword(id, oldPassword, newPassword), HttpStatus.OK);
     }
 
 }
