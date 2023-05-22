@@ -95,6 +95,7 @@ public class AuthServiceImpl implements AuthService {
             Optional<User> user = repo.getUserByEmail(email);
             user.get().setTrangThai(true);
             repo.save(user.get());
+            System.out.println("save user");
             return true;
         }
         return false;

@@ -5,6 +5,7 @@ import com.example.backend.exception.InvalidException;
 import com.example.backend.exception.NotFoundException;
 import com.example.backend.model.Playlist;
 import com.example.backend.model.Song;
+import com.example.backend.model.User;
 import com.example.backend.repository.PlaylistRepository;
 import com.example.backend.service.PlaylistService;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,12 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
+    public List<Playlist> getPlaylistOfUser(String id) {
+        List<Playlist> listPlaylist = repo.getPlaylistOfUser(id);
+        return listPlaylist;
+    }
+
+    @Override
     public Playlist getPlaylistById(String id) {
         Optional<Playlist> playlist = repo.findById(id);
         return playlist.get();
@@ -43,7 +50,7 @@ public class PlaylistServiceImpl implements PlaylistService {
     }
 
     @Override
-    public Playlist create(PlaylistDto dto) {
+    public Playlist create(PlaylistDto dto, User user) {
         Playlist playlist;
         if(ObjectUtils.isEmpty(dto.getName())) {
             throw new InvalidException("Vui lòng nhập tên playlist");
@@ -52,6 +59,7 @@ public class PlaylistServiceImpl implements PlaylistService {
         playlist.setName(dto.getName());
         playlist.setThumbnail(null);
         playlist.setListSongs(null);
+        playlist.setUser(user);
         repo.save(playlist);
         return playlist;
     }
@@ -66,7 +74,15 @@ public class PlaylistServiceImpl implements PlaylistService {
         if (newListSong == null) {
             newListSong = new ArrayList<>();
             playlist.setThumbnail(song.getImageSongUrl());
+        } else {
+            List<Song> list = playlist.getListSongs();
+            for(int i = 0; i < list.size(); i++) {
+                if(list.get(i).getId().equals(song.getId())) {
+                    return null;
+                }
+            }
         }
+
         newListSong.add(song);
         playlist.setListSongs(newListSong);
         repo.save(playlist);
@@ -79,15 +95,19 @@ public class PlaylistServiceImpl implements PlaylistService {
         if(playlist == null) {
             throw new NotFoundException(String.format("Không tìm thấy playlist với id %s", id));
         }
-        List<Song> newListSong = playlist.getListSongs();
-        if(newListSong.isEmpty()) {
+        List<Song> listSong = playlist.getListSongs();
+        if(listSong.isEmpty()) {
             throw new InvalidException("Không có bài hát nào trong playlist");
         }
-        newListSong.remove(song);
-        if(newListSong.isEmpty()) {
+        for(int i = 0; i < listSong.size(); i++) {
+            if(listSong.get(i).getId().equals(song.getId())) {
+                listSong.remove(i);
+            }
+        }
+        if(listSong.isEmpty()) {
             playlist.setThumbnail(null);
         }
-        playlist.setListSongs(newListSong);
+        playlist.setListSongs(listSong);
         repo.save(playlist);
         return playlist;
     }
@@ -100,6 +120,9 @@ public class PlaylistServiceImpl implements PlaylistService {
         }
         if(!ObjectUtils.isEmpty(dto.getName())) {
             playlist.setName(dto.getName());
+        }
+        if(!ObjectUtils.isEmpty(dto.getUser())) {
+            playlist.setUser(dto.getUser());
         }
         repo.save(playlist);
         return playlist;

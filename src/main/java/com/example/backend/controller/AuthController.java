@@ -39,6 +39,7 @@ public class AuthController {
 
     @PostMapping("/{email}/verify")
     public ResponseEntity<String> verifyOTP(@PathVariable String email, @RequestParam String otp) {
+        System.out.println(email+otp);
         if(authService.verifyOTP(email, otp)) {
             return new ResponseEntity<>("Xác thực OTP thành công", HttpStatus.OK);
         }
