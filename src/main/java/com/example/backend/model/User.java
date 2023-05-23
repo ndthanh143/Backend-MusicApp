@@ -24,6 +24,8 @@ public class User {
 
     private String password;
 
+    private String avatar;
+
     private ERole role;
 
     private boolean trangThai = true;

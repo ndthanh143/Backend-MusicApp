@@ -18,14 +18,11 @@ import java.util.Optional;
 @Service
 public class SongServiceImpl implements SongService {
     private SongRepository repo;
-    private Cloudinary cloudinary;
-
     private final FileStorageService fileUpload;
 
 
-    public SongServiceImpl(SongRepository repo, Cloudinary cloudinary, FileStorageService fileUpload) {
+    public SongServiceImpl(SongRepository repo, FileStorageService fileUpload) {
         this.repo = repo;
-        this.cloudinary = cloudinary;
         this.fileUpload = fileUpload;
     }
 
