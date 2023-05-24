@@ -70,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment delete(String id) {
         Comment existComment = getById(id);
         if(existComment == null) {
-            throw new NotFoundException("Không tìm thấy comment có id: "+id);
+            throw new NotFoundException("Không tìm thấy comment có id âdasdad: "+id);
         }
         repo.delete(existComment);
         return existComment;
