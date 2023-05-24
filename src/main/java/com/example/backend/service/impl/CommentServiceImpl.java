@@ -58,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment update(String id, String comment) {
         Comment existComment = getById(id);
-        if(existComment == null) {
+        if(existComment != null) {
             throw new NotFoundException("Không tìm thấy comment có id: "+id);
         }
         existComment.setComment(comment);
@@ -69,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment delete(String id) {
         Comment existComment = getById(id);
-        if(existComment == null) {
+        if(existComment != null) {
             throw new NotFoundException("Không tìm thấy comment có id: "+id);
         }
         repo.delete(existComment);
