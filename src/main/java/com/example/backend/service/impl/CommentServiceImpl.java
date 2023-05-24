@@ -59,7 +59,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment update(String id, String comment) {
         Comment existComment = getById(id);
         if(existComment == null) {
-            throw new NotFoundException("Không tìm thấy comment có id adadad: "+id);
+            throw new NotFoundException("Không tìm thấy comment có id main: "+id);
         }
         existComment.setComment(comment);
         existComment.setUpdatedAt(new Date());
