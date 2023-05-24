@@ -9,10 +9,8 @@ import com.example.backend.service.CommentService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class CommentServiceImpl implements CommentService {
@@ -60,7 +58,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment update(String id, String comment) {
         Comment existComment = getById(id);
-        if(existComment != null) {
+        if(existComment == null) {
             throw new NotFoundException("Không tìm thấy comment có id: "+id);
         }
         existComment.setComment(comment);
@@ -71,7 +69,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment delete(String id) {
         Comment existComment = getById(id);
-        if(existComment != null) {
+        if(existComment == null) {
             throw new NotFoundException("Không tìm thấy comment có id: "+id);
         }
         repo.delete(existComment);
