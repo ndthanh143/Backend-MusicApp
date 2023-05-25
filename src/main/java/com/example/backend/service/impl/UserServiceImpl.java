@@ -10,12 +10,13 @@ import com.example.backend.service.UserService;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
-    private FileStorageService fileUpload;
+    private FileStorageService fileStorageService;
 
     public UserServiceImpl(UserRepository userRepository){this.userRepository=userRepository;}
     @Override
@@ -25,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUser(String id) {
-        return userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("Tài khoản có mã id là %s đã tồn tại",id)));
+        return userRepository.findById(id).orElseThrow(()->new NotFoundException(String.format("Không tìm thấy tài khoản có id: ",id)));
     }
 
     @Override
@@ -45,11 +46,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateAvatar(String id, String avatar) {
+    public User updateAvatar(String id, String avatar) throws IOException {
         User user = getUser(id);
+
         if(user == null) {
             throw new NotFoundException("User not found");
         }
+        fileStorageService.deleteFile(user.getAvatar());
         user.setAvatar(avatar);
         userRepository.save(user);
         return user;

@@ -59,8 +59,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment update(String id, String comment) {
         Comment existComment = getById(id);
         if(existComment == null) {
-            System.out.println("3");
-            throw new NotFoundException("Không tìm thấy comment có id là 3: "+id);
+            throw new NotFoundException("Không tìm thấy comment có id: "+id);
         }
         existComment.setComment(comment);
         existComment.setUpdatedAt(new Date());
@@ -71,7 +70,7 @@ public class CommentServiceImpl implements CommentService {
     public Comment delete(String id) {
         Comment existComment = getById(id);
         if(existComment == null) {
-            throw new NotFoundException("Không tìm thấy comment có id âdasdad: "+id);
+            throw new NotFoundException("Không tìm thấy comment có id: "+id);
         }
         repo.delete(existComment);
         return existComment;
