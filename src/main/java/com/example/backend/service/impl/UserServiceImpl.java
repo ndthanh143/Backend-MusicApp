@@ -1,5 +1,6 @@
 package com.example.backend.service.impl;
 
+import com.example.backend.dto.UserAdminUpdateDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.exception.InvalidException;
 import com.example.backend.exception.NotFoundException;
@@ -40,6 +41,28 @@ public class UserServiceImpl implements UserService {
         }
         if(!ObjectUtils.isEmpty(dto.getPassword())) {
             existUser.setPassword(dto.getPassword());
+        }
+        userRepository.save(existUser);
+        return existUser;
+    }
+
+    @Override
+    public User adminUpdate(String id, UserAdminUpdateDto dto) {
+        User existUser = getUser(id);
+        if(existUser == null) {
+            throw new NotFoundException("User not found");
+        }
+        if(!ObjectUtils.isEmpty(dto.getName())) {
+            existUser.setName(dto.getName());
+        }
+        if(!ObjectUtils.isEmpty(dto.getEmail())) {
+            existUser.setEmail(dto.getEmail());
+        }
+        if(!ObjectUtils.isEmpty(dto.getPhone())) {
+            existUser.setPhone(dto.getPhone());
+        }
+        if(!ObjectUtils.isEmpty(dto.getRole())) {
+            existUser.setRole(dto.getRole());
         }
         userRepository.save(existUser);
         return existUser;

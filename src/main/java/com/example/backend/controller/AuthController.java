@@ -14,6 +14,7 @@ import javax.naming.AuthenticationException;
 
 @RestController
 @RequestMapping("/api/auth")
+@CrossOrigin(origins = "*")
 public class AuthController {
     @Autowired
     private final AuthService authService;
@@ -38,11 +39,8 @@ public class AuthController {
     }
 
     @PostMapping("/{email}/verify")
-    public ResponseEntity<String> verifyOTP(@PathVariable String email, @RequestParam String otp) {
+    public ResponseEntity<Boolean> verifyOTP(@PathVariable String email, @RequestParam String otp) {
         System.out.println(email+otp);
-        if(authService.verifyOTP(email, otp)) {
-            return new ResponseEntity<>("Xác thực OTP thành công", HttpStatus.OK);
-        }
-        return new ResponseEntity<>("Xác thực OTP thất bại", HttpStatus.OK);
+        return new ResponseEntity<>(authService.verifyOTP(email, otp), HttpStatus.OK);
     }
 }

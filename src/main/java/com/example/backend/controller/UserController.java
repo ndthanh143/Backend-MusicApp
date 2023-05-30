@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.UserAdminUpdateDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.model.User;
 import com.example.backend.service.FileStorageService;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     private final UserService userService;
@@ -35,6 +37,11 @@ public class UserController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUser(@PathVariable String id) {
+        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+    }
+
     @PutMapping("/{id}/upload-avatar")
     public ResponseEntity<User> updateAvatar(@PathVariable String id, @RequestPart("avatar") MultipartFile avatar) throws IOException {
         String avatarUrl = fileStorageService.uploadFile(avatar);
@@ -45,9 +52,19 @@ public class UserController {
     public ResponseEntity<User> update(@PathVariable String id, @RequestBody UserDto dto) {
         return new ResponseEntity<>(userService.update(id, dto), HttpStatus.OK);
     }
+
+    @PutMapping("/admin-update/{id}")
+    public ResponseEntity<User> adminUpdate(@PathVariable String id, @RequestBody UserAdminUpdateDto dto) {
+        return new ResponseEntity<>(userService.adminUpdate(id, dto), HttpStatus.OK);
+    }
     @PutMapping("/update-password/{id}")
-    public ResponseEntity<User> updatePassword(@PathVariable String id, @RequestPart("oldPassword") String oldPassword, @RequestPart("newPassword") String newPassword) {
+    public ResponseEntity<User> updatePassword(@PathVariable String id, @RequestParam("oldPassword") String oldPassword, @RequestParam("newPassword") String newPassword) {
+        System.out.println(oldPassword+ newPassword);
         return new ResponseEntity<>(userService.changePassword(id, oldPassword, newPassword), HttpStatus.OK);
     }
 
+    @DeleteMapping()
+    public ResponseEntity<User> delete(@RequestParam("userId") String userId ) {
+        return new ResponseEntity<>(userService.delete(userId), HttpStatus.OK);
+    }
 }

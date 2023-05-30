@@ -14,6 +14,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/playlist")
+@CrossOrigin(origins = "*")
+
 public class PlaylistController {
     private final PlaylistService playlistService;
     private final UserService userService;

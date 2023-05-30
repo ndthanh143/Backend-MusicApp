@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.UserAdminUpdateDto;
 import com.example.backend.dto.UserDto;
 import com.example.backend.model.User;
 
@@ -10,6 +11,8 @@ public interface UserService {
     List<User> findAll();
     User getUser(String id);
     User update(String id, UserDto DTO);
+
+    User adminUpdate(String id, UserAdminUpdateDto DTO);
 
     User updateAvatar(String id, String avatar) throws IOException;
 

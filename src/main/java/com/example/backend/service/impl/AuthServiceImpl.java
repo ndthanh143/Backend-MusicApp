@@ -86,7 +86,7 @@ public class AuthServiceImpl implements AuthService {
         return String.valueOf(verificationCode);
     }
 
-    public boolean verifyOTP(String email, String otp) {
+    public Boolean verifyOTP(String email, String otp) {
         Optional<UserOTP> userOTP = otpRepository.findByEmail(email);
         if (userOTP != null && userOTP.get().getOtp().equals(otp) && !userOTP.get().isVerified()) {
             // Xác thực thành công
@@ -98,7 +98,7 @@ public class AuthServiceImpl implements AuthService {
             System.out.println("save user");
             return true;
         }
-        return false;
+        throw new InvalidException("OTP not correct");
     }
 
     private void sendVerificationEmail(String email, String verificationCode) {

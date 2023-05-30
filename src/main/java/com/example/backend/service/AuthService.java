@@ -11,5 +11,5 @@ public interface AuthService {
 
     User login(String email, String password) throws AuthenticationException;
 
-    boolean verifyOTP(String email, String otp);
+    Boolean verifyOTP(String email, String otp);
 }
